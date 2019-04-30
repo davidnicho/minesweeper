@@ -125,16 +125,16 @@ function checkForWin() {
   // Find all hidden cells
   var hiddenCells = board.cells.filter((x) => { return x.hidden;});
 
-  // Are they all 
+  // Which cells aren't mines but have been hidden?
   var falselyHidden = hiddenCells.filter((x) => { return x.isMine == false});
 
-  // If there
-  if (!falselyHidden.length) {
+  // If there are none - You've won!
+  if (falselyHidden.length == 0) {
     lib.displayMessage('You win!')
   };
 
   // Find All Mines
-  var mineArray = board.cells.filter((x) => { return x.isMine;});
+  // var mineArray = board.cells.filter((x) => { return x.isMine;});
 
   // // Find unMarked Mines
   // var markedMineArray = mineArray.filter((x) => {return x.isMarked == false;});
