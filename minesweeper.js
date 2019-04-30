@@ -54,7 +54,7 @@ var board = {
     {
       row: 2,
       col: 0,
-      isMine: false,
+      isMine: true,
       hidden: true
     },
     {
@@ -84,7 +84,7 @@ var board = {
     {
       row: 3,
       col: 1,
-      isMine: false,
+      isMine: true,
       hidden: true
     },
     {
@@ -104,15 +104,18 @@ var board = {
 function startGame() {
   // Don't remove this function call: it makes the game work!
 
+  // Add surrounding mines value to each cell
   for (let i = 0; i < board.cells.length; i++) {
     var surroundingMines = countSurroundingMines(board.cells[i]);
     board.cells[i].surroundingMines = surroundingMines;
   }
 
+  // Initialize Board
   lib.initBoard()
 
-  document.addEventListener("click", checkForWin());
-  document.addEventListener("contextmenu", checkForWin());
+  // Initialize Event Listeners
+  document.addEventListener("click", checkForWin);
+  document.addEventListener("contextmenu", checkForWin);
 }
 
 // Define this function to look for a win condition:
@@ -125,25 +128,53 @@ function checkForWin() {
   // Find all hidden cells
   var hiddenCells = board.cells.filter((x) => { return x.hidden;});
 
-  // Which cells aren't mines but have been hidden?
+  // Which cells aren't mines but are hidden?
   var falselyHidden = hiddenCells.filter((x) => { return x.isMine == false});
 
-  // If there are none - You've won!
-  if (falselyHidden.length == 0) {
-    lib.displayMessage('You win!')
+  // Find all flags
+  var flags = board.cells.filter((x) => { return x.isMarked;});
+  
+  // Find all mines
+  var mines = board.cells.filter((x) => { return x.isMine;});
+
+  // If there are no falsley hidden cells
+  if (falselyHidden.length === 0) {
+    // And there are as many flags as mines
+    if (flags.length === mines.length) {
+      // You WIN!
+      lib.displayMessage('You win!')      
+    }
   };
 
-  // Find All Mines
-  // var mineArray = board.cells.filter((x) => { return x.isMine;});
 
-  // // Find unMarked Mines
-  // var markedMineArray = mineArray.filter((x) => {return x.isMarked == false;});
+  // Started another approach but of course markedBlanks array is often empty so false wins common
 
-  // For each cell
-  // Check if each cell is a mine and is marked
-  // If a mine is not marked then return
-  // If every mine is marked but there are hidden cells then return
-  // If mines are marked and no other cells are hidden then display win
+                // Find All Marked Cells
+                // var markedCells = board.cells.filter((x) => { return x.isMarked;});
+
+                // Are any not mines?
+                // var markedBlanks = markedCells.filter((x) => {return x.isMine == false});
+
+                // if (markedBlanks.length === 0) {
+                //   lib.displayMessage('You win!')    
+                // }
+
+  // Would love to know how to do this with a for loop!
+
+                // var win = false;
+
+                // for (let i = 0; i < board.cells.length; i++) {
+                //   // If it is not a mine, it should not be hidden to win.
+                //   if (board.cells[i].isMine == false) {
+                //     if (board.cells[i].hidden == false) {
+                //       win = true;
+                //     }
+                //     return;
+                //   } else (board.cells[i].isMarked) {
+                //     win = true;
+                //   }
+    
+  // }
 }
 
 // Define this function to count the number of mines around the cell
