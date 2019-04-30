@@ -1,6 +1,30 @@
 document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
+
+var difficultyLevel = 5;
+
+// function createCells(difficultyLevel) {
+//   var cells = [];
+//   for (let i = 0; i < difficultyLevel; i++) {
+//     for (let j = 0; j < difficultyLevel; j++) {
+//       var cell = {
+//         row: i,
+//         col: j,
+//         isMine: false,
+//         hidden: true
+//       }
+//       cells.push(cell);
+//     }
+//   }
+//   return cells;
+// }
+
+// var board = {
+//   cells: createCells(difficultyLevel)
+// }
+
+
 var board = {
   cells: [
     {
@@ -110,10 +134,8 @@ function startGame() {
     board.cells[i].surroundingMines = surroundingMines;
   }
 
-  // Initialize Board
   lib.initBoard()
 
-  // Initialize Event Listeners
   document.addEventListener("click", checkForWin);
   document.addEventListener("contextmenu", checkForWin);
 }
@@ -128,7 +150,7 @@ function checkForWin() {
   // Find all hidden cells
   var hiddenCells = board.cells.filter((x) => { return x.hidden;});
 
-  // Which cells aren't mines but are hidden?
+  // Which hidden cells aren't mines but are hidden?
   var falselyHidden = hiddenCells.filter((x) => { return x.isMine == false});
 
   // Find all flags
@@ -142,10 +164,10 @@ function checkForWin() {
     // And there are as many flags as mines
     if (flags.length === mines.length) {
       // You WIN!
+      winAudio.play()
       lib.displayMessage('You win!')      
     }
   };
-
 
   // Started another approach but of course markedBlanks array is often empty so false wins common
 
@@ -187,7 +209,7 @@ function checkForWin() {
 // them, counting the number of times `cell.isMine` is true.
 
 //Pass the cell into the function
-function countSurroundingMines(cell) {
+function countSurroundingMines (cell) {
 
   // Get an array of surrounding cells
   var surroundingCells = lib.getSurroundingCells(cell.row, cell.col);
@@ -207,3 +229,17 @@ function countSurroundingMines(cell) {
   // return the count
   return surroundingMineCount;
 }
+
+
+// Reset the game
+
+// function resetGame() {
+//   startGame();
+// }
+
+// Audio
+
+var winAudio = new Audio('audio/win.mp3');
+var loseAudio = new Audio('audio/lose.mp3');
+var flagAudio = new Audio('audio/flag.mp3');
+
